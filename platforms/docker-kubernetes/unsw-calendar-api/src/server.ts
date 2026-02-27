@@ -92,9 +92,11 @@ const update = async () => {
 
 const scheduleDailyUpdate = () => {
   const now = new Date();
-  const sydneyNow = new Date(
-    now.toLocaleString("en-AU", { timeZone: "Australia/Sydney" }),
-  );
+  // Convert to Sydney time properly using UTC offset
+  const sydneyOffset = 11 * 60; // AEDT is UTC+11 (adjust for AEST UTC+10 if needed)
+  const utc = now.getTime() + now.getTimezoneOffset() * 60000;
+  const sydneyNow = new Date(utc + sydneyOffset * 60000);
+  
   const target = new Date(sydneyNow);
   target.setHours(3, 0, 0, 0); // 3:00 AM Sydney time
 

@@ -28,6 +28,8 @@ export async function initCache(): Promise<CacheShape> {
 export async function flush() {
   const tmp = CACHE_PATH + ".tmp";
   await fs.writeFile(tmp, JSON.stringify(mem, null, 2), "utf8");
+  // On Windows, rename fails if target exists, so delete it first
+  await fs.unlink(CACHE_PATH).catch(() => {});
   await fs.rename(tmp, CACHE_PATH);
 }
 
